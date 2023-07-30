@@ -27,7 +27,7 @@ i18n
       caches: ["localStorage"]
     },
     backend: {
-      loadPath: './dist/locales/{{lng}}/{{ns}}.json'
+      loadPath: './locales/{{lng}}/{{ns}}.json'
     },
 });
 
