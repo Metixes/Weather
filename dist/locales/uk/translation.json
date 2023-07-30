@@ -1,0 +1,11 @@
+{
+    "wind": "Вітер",
+    "humidity": "Вологість",
+    "pressure": "Тиск",
+    "feels_like": "Відчувається як:",
+    "wind-unit": "м/c",
+    "pressure-utin": "Па",
+    "search-placeholder": "Шукати місто...",
+    "search-button": "Додати",
+    "error-message": "Такого міста не існує. Перевірте правильність вводу"
+}
