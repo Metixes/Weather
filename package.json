@@ -7,9 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "storybook": "start-storybook -p 6006 -s ./dist/public/locales",
-    "build-storybook": "build-storyboock -s ./dist/locales"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
