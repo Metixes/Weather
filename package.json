@@ -8,8 +8,8 @@
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "storybook": "start-storybook -p 6006 -s ./public/locales",
-    "build-storybook": "build-storyboock -s ./locales"
+    "storybook": "start-storybook -p 6006 -s ./dist/public/locales",
+    "build-storybook": "build-storyboock -s ./dist/locales"
   },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
