@@ -17,7 +17,6 @@ i18n
   .init({
     lng: defaultLanguage,
     fallbackLng: "en",
-    locales: ['en', 'uk', 'he'],
     localeDetection: true,
     interpolation: {
       escapeValue: false
@@ -27,7 +26,7 @@ i18n
       caches: ["localStorage"]
     },
     backend: {
-      loadPath: './dist/locales/{{lng}}/{{ns}}.json'
+      loadPath: '/locales/{{lng}}/{{ns}}.json'
     },
 });
 
