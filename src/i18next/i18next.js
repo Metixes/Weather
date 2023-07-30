@@ -23,6 +23,9 @@ i18n
       order: ["localStorage", "htmlTag", "cookie"],
       caches: ["localStorage"]
     },
+    backend: {
+      loadPath: '../public/locales/{{lng}}/{{ns}}.json'
+    },
 });
 
 export default i18n
