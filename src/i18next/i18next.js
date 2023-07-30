@@ -19,6 +19,9 @@ i18n
     fallbackLng: "en",
     locales: ['en', 'uk', 'he'],
     localeDetection: true,
+    interpolation: {
+      escapeValue: false
+    },
     detection: {
       order: ["localStorage", "htmlTag", "cookie"],
       caches: ["localStorage"]
