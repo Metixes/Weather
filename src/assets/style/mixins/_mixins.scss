@@ -1,0 +1,88 @@
+@mixin card-city-name{
+    color: $black;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0px;
+};
+@mixin card-weather-discription{
+    color: $grey-ultra-light;
+    font-size: 13px;
+    line-height: 19px;
+    letter-spacing: 0px;
+};
+@mixin card-city-date{
+    color: $black;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 26px;
+    letter-spacing: 0px;
+};
+@mixin card-city-temp{
+    color: $black;
+    font-size: 44px;
+    line-height: 64px;
+    letter-spacing: 0px;
+};
+@mixin card-weather-feels{
+    color: $grey-ultra-light;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 19px;
+    letter-spacing: 0px;
+};
+@mixin main-btn{
+    color: $white;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0px;
+};
+@mixin card-unit-btn{
+    padding: 0 10px;
+    background-color: transparent;
+    border: none;
+
+    color: $black;
+    font-size: 22px;
+    line-height: 32px;
+    letter-spacing: 0px;
+    cursor: pointer;
+};
+@mixin card-utin-slash{
+    position: absolute;
+    content: '';
+    width: 2px;
+    top: 3px;
+    bottom: 3px;
+    background-color: $grey-middle;
+}
+@mixin card-unit-btn-disabled{
+    padding: 0 10px;
+    background-color: transparent;
+    border: none;
+
+    color: $grey-middle;
+    font-size: 22px;
+    line-height: 32px;
+    letter-spacing: 0px;
+    cursor: pointer;
+};
+@mixin card-info-items{
+    color: $black;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0px;
+};
+@mixin card-info-item-hot{
+    color: $beige;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+    letter-spacing: 0px;
+};
+@mixin card-info-item-cold{
+    color: $blue;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+    letter-spacing: 0px;
+};

@@ -1,0 +1,139 @@
+@import '../variables/variables';
+@import '../mixins/mixins';
+
+.weather-card{
+    position: relative;
+    max-width: 350px;
+    width: 100%;
+    padding: 10px 15px 10px 15px;
+
+    border-radius: 5px;
+    box-shadow: 4px 4px 15px -4px rgba(0, 0, 0, 0.16);
+    background: $baige-middle 0% 0% no-repeat padding-box;
+
+    &-is-cold{
+        position: relative;
+        max-width: 350px;
+        width: 100%;
+        padding: 10px 15px 10px 15px;
+
+        border-radius: 5px;
+        box-shadow: 4px 4px 15px -4px rgba(0, 0, 0, 0.16);
+        background: $blue-light 0% 0% no-repeat padding-box; 
+    }
+
+    &_close-btn{
+        position: absolute;
+        right: 10px;
+
+        cursor: pointer;
+
+        & svg{
+            fill: $grey-ultra-light;
+        }
+    }
+
+    body:has(rtl) {
+        .weather-card_close-btn{
+            position: absolute;
+            right: inherit;
+            left: 0; 
+
+            cursor: pointer;
+        }
+    }
+
+    &__city-info{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &_city-name{
+        @include card-city-name;
+    }
+
+    &__description{
+        display: flex;
+        align-items: center;
+    }
+
+    &_icon{
+        max-width: 50px;
+    }
+
+    &_icon-description{
+        @include card-weather-discription;
+    }
+
+    &_data{
+        @include card-city-date;
+    }
+
+    &_charts{
+        height: 71px;
+    }
+
+    &__temp-info{
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+    }
+
+    &__current-temp{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__city-current-temp{
+        display: flex;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    &_city-temp{
+        @include card-city-temp;
+        min-width: 79px;
+    }
+
+    &__selected-units{
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    &_selected-btn{
+        @include card-unit-btn;
+    }
+
+    &_selected-btn-active{
+        @include card-unit-btn-disabled;
+    }
+
+    &_slash::before{
+        @include card-utin-slash
+    }
+
+    &_feels-like{
+        @include card-weather-feels;
+    }
+
+    &__info{
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+
+        &_items{
+            @include card-info-items;
+        }
+
+        &_item-is-hot{
+            @include card-info-item-hot;
+        }
+
+        &_item-is-cold{
+            @include card-info-item-cold;
+        }
+    }
+}

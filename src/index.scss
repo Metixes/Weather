@@ -1,0 +1,19 @@
+@import './assets/style/variables/variables';
+@import './assets/style/mixins/mixins';
+@import './assets/style/header/header';
+@import './assets/style/main/main';
+@import './assets/style/main/weather-card';
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*{
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: $black;
+    line-height: 18px;
+}

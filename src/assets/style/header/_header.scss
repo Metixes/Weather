@@ -1,0 +1,16 @@
+@import '../variables/variables.scss' ;
+
+.header {
+    padding: 25px 25px 0 25px;
+
+    &_wrapper{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; 
+    }
+
+    &_icon{
+        max-width: 30px;    
+    }
+}
