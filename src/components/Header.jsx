@@ -1,4 +1,4 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '../data/store'
 import { Select } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'

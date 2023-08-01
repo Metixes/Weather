@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Button, AutoComplete  } from 'antd'
 import { useStore } from '../data/store'
 import { useTranslation } from 'react-i18next';
+
 import i18n from '../i18next/i18next'
 import useDebounce from '../data/useDebounce'
 import axios from 'axios'
@@ -10,9 +12,12 @@ import '../assets/style/main/_main.scss'
 
 export default function Main() {
     const { t } = useTranslation();
+
+    const navigate = useNavigate()
     const getWeather = useStore(state => state.getWeather)
     const getLatLonWeather = useStore(state => state.getLatLonWeather)
     const lenaguage = i18n.language
+
     const [inputCityName, setInputCityName] = useState('')
     const [citysList, setcitysList] = useState([])
 
@@ -24,6 +29,7 @@ export default function Main() {
 
     useEffect(() => {
         getLatLonWeather(lenaguage)
+        navigate(`/${i18n.language}`)
     }, [])
 
     const handelShowCurrentWeather = async (value) => {
