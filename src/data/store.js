@@ -45,7 +45,7 @@ export const useStore = create()(persist((set, get) => ({
                             disabledFahrenheit: false,
                             cityName: data.city.name,
                             countryCode: data.city.country,
-                            cityDate: dayjs(new Date).locale(lng).format(lng === 'uk' ? 'dd MMMM YYYY, HH:mm':'ddd MMMM YYYY, HH:mm'),
+                            cityDate: dayjs(new Date).locale(lng).format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm':'ddd MMMM YYYY, HH:mm'),
                             weatherIcon: data.list[0].weather[0].icon,
                             weatherDescription: data.list[0].weather[0].description,
                             weatherCurrentTemp: data.list[0].main.temp.toFixed(),
