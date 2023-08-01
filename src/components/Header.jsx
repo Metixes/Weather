@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useStore } from '../data/store'
 import { Select } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
@@ -31,7 +31,7 @@ export default function Header() {
 
     const changeLang = (lang) => {
         i18n.changeLanguage(lang)
-        navigate(`./${lang}`)
+        navigate(`/${lang}`)
         getWeathers(lang)
         cardsIsEmpty(lang)
     }
