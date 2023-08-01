@@ -51,7 +51,7 @@ export default function WeatherCard() {
         <div className='main_weathers'>
             {
                 Object.keys(card).map(el => (
-                    <section key={crypto.randomUUID()} className={card[el].weatherCurrentTemp > 0 ? 'weather-card' : 'weather-card-is-cold'}>
+                    <section key={el} className={card[el].weatherCurrentTemp > 0 ? 'weather-card' : 'weather-card-is-cold'}>
                         <CloseOutlined className='weather-card_close-btn'
                             style={{width: 7}}
                             onClick={() => deleteWeatherCard(el)}

@@ -11,7 +11,7 @@ import '../assets/style/main/_main.scss'
 export default function Main() {
     const { t } = useTranslation();
     const getWeather = useStore(state => state.getWeather)
-    const getLetLongWeather = useStore(state => state.getLetLongWeather)
+    const getLatLonWeather = useStore(state => state.getLatLonWeather)
     const lenaguage = i18n.language
     const [inputCityName, setInputCityName] = useState('')
     const [citysList, setcitysList] = useState([])
@@ -23,7 +23,7 @@ export default function Main() {
     }, [debounceInputValue])
 
     useEffect(() => {
-        getLetLongWeather(lenaguage)
+        getLatLonWeather(lenaguage)
     }, [])
 
     const handelShowCurrentWeather = async (value) => {

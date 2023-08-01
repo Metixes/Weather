@@ -17,7 +17,7 @@ export const useStore = create()(persist((set, get) => ({
         return Object.keys(obj).length !== 0
     },
 
-    getLetLongWeather: (lng) => {
+    getLatLonWeather: (lng) => {
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const latitude = position.coords.latitude;
@@ -211,7 +211,6 @@ export const useStore = create()(persist((set, get) => ({
                 }
             }));
         }
-        
     },
     selectedFahrenheit : (cardId) => {
         const cards = get().cards;
