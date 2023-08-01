@@ -5,7 +5,7 @@
     "feels_like": "Відчувається як:",
     "wind-unit": "м/c",
     "pressure-utin": "Па",
-    "search-placeholder": "Шукати місто...",
+    "search-placeholder": "Введіть назву міста...",
     "search-button": "Додати",
     "error-message": "Такого міста не існує. Перевірте правильність вводу"
 }
