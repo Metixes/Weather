@@ -8,7 +8,7 @@ console.log(i18n.language)
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Router>
     <Routes>
-      <Route path='/:lang' element={<App />} />
+      <Route path='/forecastwinds.vercel.app/:lang' element={<App />} />
     </Routes>
   </Router>
 )
