@@ -101,7 +101,7 @@ export const useStore = create()(persist((set, get) => ({
                             updatedCards[el.id] = {
                                 ...updatedCards[el.id],
                                 weatherDescription: el.weather[0].description,
-                                cityDate: dayjs(new Date).locale(lng).format(lng === 'uk' ? 'dd MMMM YYYY, HH:mm':'ddd MMMM YYYY, HH:mm'),
+                                cityDate: dayjs(new Date).locale(lng).format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm':'ddd MMMM YYYY, HH:mm'),
                                 formattedNextData: lng === 'he' 
                                 ? 
                                 get().getCurrentData(updatedCards[el.id].nextData).reverse() // reversed formattedDana if locale language is "he" for charts 
