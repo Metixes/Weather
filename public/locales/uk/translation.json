@@ -4,7 +4,7 @@
     "pressure": "Тиск",
     "feels_like": "Відчувається як:",
     "wind-unit": "м/c",
-    "pressure-utin": "Па",
+    "pressure-unit": "Па",
     "search-placeholder": "Введіть назву міста...",
     "search-button": "Додати",
     "error-message": "Такого міста не існує. Перевірте правильність вводу"

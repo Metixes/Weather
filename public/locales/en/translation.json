@@ -4,7 +4,7 @@
     "pressure": "Pressure",
     "feels_like": "Feels like:",
     "wind-unit": "m/s",
-    "pressure-utin": "Pa",
+    "pressure-unit": "Pa",
     "search-placeholder": "Search city...",
     "search-button": "Add",
     "error-message": "Such a city does not exist. Check that the input is correct"

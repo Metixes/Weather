@@ -1,0 +1,33 @@
+@import '../variables/variables';
+@import '../mixins/mixins';
+
+.main{
+    &_search{
+        margin: 0 auto;
+        max-width: 691px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        
+        margin-bottom: 120px;
+    }
+
+    &_search{
+        &_input{
+            width: 100%;
+            :global{
+                .ant-select-selection-search, .ant-select-show-search {
+                    @include input;
+                }
+            }
+        }
+        &_btn{
+            padding: 0 43px;
+            background-color: $blue;
+            & span {
+                @include main-btn;
+            }
+        }
+    }
+}

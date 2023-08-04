@@ -1,0 +1,167 @@
+@import '../variables/variables';
+@import '../mixins/mixins';
+
+.weather{
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 25px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+
+    &_isCold{
+        position: relative;
+        max-width: 350px;
+        width: 100%;
+        padding: 10px 15px 10px 15px;
+
+        border-radius: 5px;
+        box-shadow: 4px 4px 15px -4px rgba(0, 0, 0, 0.16);
+        background: $blue-light 0% 0% no-repeat padding-box; 
+    }
+
+    &_card{
+        position: relative;
+        max-width: 350px;
+        width: 100%;
+        padding: 10px 15px 10px 15px;
+
+        border-radius: 5px;
+        box-shadow: 4px 4px 15px -4px rgba(0, 0, 0, 0.16);
+        background: $baige-middle 0% 0% no-repeat padding-box;
+
+        &_isCold{
+            position: relative;
+            max-width: 350px;
+            width: 100%;
+            padding: 10px 15px 10px 15px;
+    
+            border-radius: 5px;
+            box-shadow: 4px 4px 15px -4px rgba(0, 0, 0, 0.16);
+            background: $blue-light 0% 0% no-repeat padding-box; 
+        }
+
+        &_closeBtn{
+            position: absolute;
+            right: 10px;
+            background-color: unset;
+            cursor: pointer;
+    
+            & svg{
+                width: 7px;
+                fill: $grey-ultra-light;
+            }
+        }
+
+        &__cityInfo{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &_cityName{
+            @include card-city-name;
+        }
+
+        &__description{
+            display: flex;
+            align-items: center;
+        }
+
+        &_icon{
+            max-width: 50px;
+        }
+
+        &_iconDescription{
+            @include card-weather-discription;
+        }
+
+        &_data{
+            @include card-city-date;
+        }
+
+        &_charts{
+            height: 71px;
+        }
+
+        &__tempInfo{
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+        }
+
+        &__currentTemp{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__cityCurrentTemp{
+            display: flex;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        &_cityTemp{
+            @include card-city-temp;
+            min-width: 79px;
+        }
+
+        &__selectedUnits{
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        &_selectedBtn{
+            @include card-unit-btn;
+        }
+        &_selectedBtnActive{
+            @include card-unit-btn-disabled;
+        }
+
+        &_slash::before{
+            @include card-utin-slash
+        }
+
+        &_feelsLike{
+            @include card-weather-feels;
+        }
+
+        &__info{
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+    
+            &_items{
+                @include card-info-items;
+            }
+    
+            &_itemIsHot{
+                @include card-info-item-hot;
+            }
+    
+            &_itemIsCold{
+                @include card-info-item-cold;
+            }
+        }
+    }
+}
+@include rtlLayout() {
+    .weather_card_closeBtn{
+        right: inherit;
+        left: 10px;
+    }
+}
+
+.weatherCard{
+    body:has(rtl) {
+        .weather-card_close-btn{
+            position: absolute;
+            right: inherit;
+            left: 0; 
+
+            cursor: pointer;
+        }
+    }
+}

@@ -8,7 +8,7 @@ import i18n from '../i18next/i18next'
 import useDebounce from '../data/useDebounce'
 import axios from 'axios'
 
-import '../assets/style/main/_main.scss'
+import styles from '../assets/style/main/main.module.scss'
 
 export default function Main() {
     const { t } = useTranslation();
@@ -16,10 +16,9 @@ export default function Main() {
     const navigate = useNavigate()
     const getWeather = useStore(state => state.getWeather)
     const getLatLonWeather = useStore(state => state.getLatLonWeather)
-    const lenaguage = i18n.language
 
     const [inputCityName, setInputCityName] = useState('')
-    const [citysList, setcitysList] = useState([])
+    const [citiesList, setCitiesList] = useState([])
 
     const debounceInputValue = useDebounce(inputCityName, 500)
 
@@ -28,9 +27,14 @@ export default function Main() {
     }, [debounceInputValue])
 
     useEffect(() => {
-        getLatLonWeather(lenaguage)
+        getLatLonWeather(i18n.language)
         navigate(`/${i18n.language}`)
     }, [])
+
+    const handelShowWeather = (event, cityName, lng) => {
+        if(event.code === 'Enter')
+        getWeather(cityName, lng)
+    }
 
     const handelShowCurrentWeather = async (value) => {
         if(value === '') 
@@ -52,7 +56,7 @@ export default function Main() {
             if(data){
                 const arrOptions = []
                 data.forEach(el => arrOptions.push({ value: el.name, key: crypto.randomUUID() }))
-                return setcitysList(arrOptions)
+                return setCitiesList(arrOptions)
             }
         }catch{
             console.log('error')
@@ -60,19 +64,19 @@ export default function Main() {
     }
 
     return(
-        <div className='main'>
-            <div className='main_search'>
-                <AutoComplete className='main_search-input'
-                    options={citysList}
+        <div className={styles.main}>
+            <div className={styles.main_search}>
+                <AutoComplete className={styles.main_search_input}
+                    options={citiesList}
                     value={inputCityName}
-                    onSelect={(text) => getWeather(text, lenaguage)}
-                    onChange={(text) => setInputCityName(text)}
+                    onSelect={(text) => getWeather(text, i18n.language)}
+                    onChange={setInputCityName}
                     placeholder={t("search-placeholder")}
-                    onKeyDown={(e) => e.code === 'Enter' ? getWeather(inputCityName, lenaguage): ''}
+                    onKeyDown={(e) => handelShowWeather(e, inputCityName, i18n.language)}
                 />
                 <Button 
-                    className='main_search-btn'
-                    onClick={() => getWeather(inputCityName, lenaguage)}>
+                    className={styles.main_search_btn}
+                    onClick={() => getWeather(inputCityName, i18n.language)}>
                     {t("search-button")}
                 </Button>
             </div>

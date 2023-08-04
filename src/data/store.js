@@ -1,140 +1,122 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import axios from 'axios'
 import dayjs from 'dayjs'
-import 'dayjs/locale/en'
-import 'dayjs/locale/uk'
-import 'dayjs/locale/he'
+import instance from '../config'
 
 const API_KEY = '5fedcbd7c2c4e234f857f50c88de30ae'
 
 export const useStore = create()(persist((set, get) => ({
     cards: {},
     currentUnits: '°C',
-    currentTest: (lng) => set({valueLng: lng}),
 
     cardsIsEmpty: (obj) => {
-        return Object.keys(obj).length !== 0
+        return Object.keys(obj).length === 0
     },
-
     getLatLonWeather: (lng) => {
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async (position) => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                const options = {
-                  method: 'GET',
-                  baseURL: 'https://api.openweathermap.org/data/2.5/forecast',
-                  params: {
-                    lat: latitude,
-                    lon: longitude,
-                    units: 'metric',
-                    cnt: 40,
-                    appid: API_KEY,
-                    lang: lng,
-                  },
-                };
-        
-                try {
-                    const res = await axios.request(options);
-                    const data = res.data;
-                    if(data){
-                        const card = {
-                            tempUnit: '°C',
-                            disabledCelsius: true,
-                            disabledFahrenheit: false,
-                            cityName: data.city.name,
-                            countryCode: data.city.country,
-                            cityDate: dayjs(new Date).locale(lng).format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm':'ddd MMMM YYYY, HH:mm'),
-                            weatherIcon: data.list[0].weather[0].icon,
-                            weatherDescription: data.list[0].weather[0].description,
-                            weatherCurrentTemp: data.list[0].main.temp.toFixed(),
-                            weatherPressure: data.list[0].main.pressure,
-                            nextData: data.list,
-                            formattedNextData: get().getCurrentData(data.list),
-                            weatherFeelsLike: data.list[0].main.feels_like.toFixed(),
-                            weatherHumidity: data.list[0].main.humidity,
-                            weatherWindSpeed: data.list[0].wind.speed,
-                            cardId: data.city.id,
+        if(get().cardsIsEmpty(get().cards) && navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    try {
+                        const res = await instance.get('forecast', {
+                            params: {
+                                lat: latitude,
+                                lon: longitude,
+                                units: 'metric',
+                                cnt: 40,
+                                appid: API_KEY,
+                                lang: lng,
+                            },
+                        });
+                        const data = res.data;
+                        if(data){
+                            const card = {
+                                tempUnit: '°C',
+                                disabledCelsius: true,
+                                disabledFahrenheit: false,
+                                cityName: data.city.name,
+                                countryCode: data.city.country,
+                                cityDate: dayjs(new Date).locale(lng).format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm':'ddd MMMM YYYY, HH:mm'),
+                                weatherIcon: data.list[0].weather[0].icon,
+                                weatherDescription: data.list[0].weather[0].description,
+                                weatherCurrentTemp: data.list[0].main.temp.toFixed(),
+                                weatherPressure: data.list[0].main.pressure,
+                                nextData: data.list,
+                                formattedNextData: get().getCurrentData(data.list),
+                                weatherFeelsLike: data.list[0].main.feels_like.toFixed(),
+                                weatherHumidity: data.list[0].main.humidity,
+                                weatherWindSpeed: data.list[0].wind.speed,
+                                cardId: data.city.id,
+                            }
+            
+                            set((state) => ({
+                                cards: { ...state.cards, [data.city.id]: card },
+                            }))
                         }
-        
-                        set((state) => ({
-                            cards: { ...state.cards, [data.city.id]: card },
-                        }))
+                    } catch {
+                        console.error('error');
                     }
-                } catch {
-                  console.error('error');
+                (error) => {
+                console.error('Error getting geolocation:', error.message);
                 }
-            },
-            (error) => {
-            console.error('Error getting geolocation:', error.message);
             }
-        );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
+            // }else {
+            //     console.error('Geolocation is not supported by this browser.');
+            // }
+            );
+            
         }
     },
-
     getWeathers: async (lng) => {
-        if(get().cardsIsEmpty(get().cards)){
-            const cards = get().cards
-            const citiesId = Object.keys(cards).join()
+        const cards = get().cards
+        const citiesId = Object.keys(cards).join()
 
-            const options = {
-                method: 'GET',
-                baseURL: 'https://api.openweathermap.org/data/2.5/group?',
-                params: {
+        try{
+            const { data } = await instance.get('group', {
+                params:{
                     id: citiesId,
+                    lang: lng,
+                    units: 'metric',
+                    cnt: 40,
+                    appid: import.meta.env.VITE_API_KEY
+                }
+            })
+            if(data){
+                set((state) => {
+                    const updatedCards = { ...state.cards }
+                    data.list.forEach((el) => {
+                        updatedCards[el.id] = {
+                            ...updatedCards[el.id],
+                            weatherDescription: el.weather[0].description,
+                            cityDate: dayjs(new Date).locale(lng).format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm':'ddd MMMM YYYY, HH:mm'),
+                            formattedNextData: lng === 'he' 
+                            ? 
+                            get().getCurrentData(updatedCards[el.id].nextData).reverse() // reversed formattedDana if locale language is "he" for charts 
+                            : 
+                            get().getCurrentData(updatedCards[el.id].nextData) // and give default formattedData if locale language is not "he" for charts
+                        };
+                    });
+                    return { cards: updatedCards }
+                })
+            }
+        }catch{
+            console.error('error')
+        }
+    },
+    getWeather: async (cityValue, lng) => {
+        if(Object.values(get().cards).find(el => el.cityName === cityValue))
+        return
+
+        try{
+            const res = await instance.get('forecast', {
+                params: {
+                    q: `${cityValue}`,
                     units: 'metric',
                     cnt: 40,
                     appid: API_KEY,
                     lang: lng
                 }
-            }
-
-            try{
-                const { data } = await axios.request(options)
-                if(data){
-                    set((state) => {
-                        const updatedCards = { ...state.cards }
-                        data.list.forEach((el) => {
-                            updatedCards[el.id] = {
-                                ...updatedCards[el.id],
-                                weatherDescription: el.weather[0].description,
-                                cityDate: dayjs(new Date).locale(lng).format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm':'ddd MMMM YYYY, HH:mm'),
-                                formattedNextData: lng === 'he' 
-                                ? 
-                                get().getCurrentData(updatedCards[el.id].nextData).reverse() // reversed formattedDana if locale language is "he" for charts 
-                                : 
-                                get().getCurrentData(updatedCards[el.id].nextData) // and give default formatterdData if locale language is not "he" for charts
-                            };
-                        });
-                        return { cards: updatedCards }
-                    })
-                }
-            }catch{
-                console.error('error')
-            }
-        }else{
-            return
-        }
-    },
-
-    getWeather: async (cityName, lng) => {
-        const options = {
-            method: 'GET',
-            baseURL: 'https://api.openweathermap.org/data/2.5/forecast',
-            params: {
-                q: `${cityName}`,
-                units: 'metric',
-                cnt: 40,
-                appid: API_KEY,
-                lang: lng
-            }
-        }
-
-        try{
-            const res = await axios.request(options)
+            })
             const date = res.data
             if(date){
                 const card = {
@@ -153,11 +135,11 @@ export const useStore = create()(persist((set, get) => ({
                     weatherFeelsLike: date.list[0].main.feels_like.toFixed(),
                     weatherHumidity: date.list[0].main.humidity,
                     weatherWindSpeed: date.list[0].wind.speed,
-                    cardId: date.city.id,
+                    cardId: date.city.id.toString(),
                 }
 
                 set((state) => ({
-                    cards: { ...state.cards, [date.city.id]: card },
+                    cards: { [date.city.id.toString()]: card, ...state.cards, },
                 }))
             }
         } catch{
@@ -184,7 +166,7 @@ export const useStore = create()(persist((set, get) => ({
         const isCelsius = cards[cardId].disabledCelsius
         const isFahrenheit = cards[cardId].disabledFahrenheit
 
-        if (currentCard) {
+        if(currentCard) {
             function getCelsius(celsius) {
                 return Number(((celsius - 32) * 5/9).toFixed());
             }
@@ -218,7 +200,7 @@ export const useStore = create()(persist((set, get) => ({
         const isCelsius = cards[cardId].disabledCelsius
         const isFahrenheit = cards[cardId].disabledFahrenheit
 
-        if (currentCard) {
+        if(currentCard) {
             function getFahrenheit(fahrenheit) {
                 return Number(((fahrenheit * 9 / 5) + 32).toFixed());
             }
