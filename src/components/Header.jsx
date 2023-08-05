@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import { useStore } from '../data/store'
 import { Select } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
@@ -10,48 +10,48 @@ import i18n from '../i18next/i18next'
 import styles from '../assets/style/header/header.module.scss'
 
 const languages = [
-    {
-        value: 'en',
-        label: 'EN',
-    },
-    {
-        value: 'uk',
-        label: 'UK',
-    },
-    {
-        value: 'he',
-        label: 'HE',
-    },
+  {
+    value: 'en',
+    label: 'EN',
+  },
+  {
+    value: 'uk',
+    label: 'UK',
+  },
+  {
+    value: 'he',
+    label: 'HE',
+  },
 ]
 
 export default function Header() {
-    const navigate = useNavigate()
-    const currentLanguage = localStorage.getItem('i18nextLng')
-    const getWeathers = useStore(state => state.getWeathers)
-    const cardsIsEmpty = useStore(state => state.cardsIsEmpty)
+  const navigate = useNavigate()
+  const currentLanguage = localStorage.getItem('i18nextLng')
+  const getWeathers = useStore(state => state.getWeathers)
+  const cardsIsEmpty = useStore(state => state.cardsIsEmpty)
 
-    const changeLang = (lang) => {
-        i18n.changeLanguage(lang)
-        navigate(`/${lang}/`)
-        getWeathers(lang)
-        cardsIsEmpty(lang)
-    }
-    return(
-        <div className={styles.header}>
-            <div className={styles.header_wrapper}>
-                <img className={styles.header_icon} src={Icon} alt="weather-icon" />
-                <div className={styles.header__language}>
-                    <GlobalOutlined className={styles.header__language_icon}/>
-                    <Select
-                        className={styles.header__language_select}
-                        bordered={false}
-                        id='select'
-                        defaultValue={currentLanguage}
-                        options={languages}
-                        onChange={changeLang}
-                    />
-                </div>
-            </div>
+  const changeLang = lang => {
+    i18n.changeLanguage(lang)
+    navigate(`/${lang}`)
+    getWeathers(lang)
+    cardsIsEmpty(lang)
+  }
+  return (
+    <div className={styles.header}>
+      <div className={styles.header_wrapper}>
+        <img className={styles.header_icon} src={Icon} alt="weather-icon" />
+        <div className={styles.header__language}>
+          <GlobalOutlined className={styles.header__language_icon} />
+          <Select
+            className={styles.header__language_select}
+            bordered={false}
+            id="select"
+            defaultValue={currentLanguage}
+            options={languages}
+            onChange={changeLang}
+          />
         </div>
-    )
+      </div>
+    </div>
+  )
 }

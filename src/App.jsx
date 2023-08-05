@@ -1,14 +1,15 @@
-import Header from "./components/Header"
-import Main from "./components/Main"
-import WeatherCard from "./components/WeatherCard"
+import MainContainer from './containers/Main'
+import i18n from './i18next/i18next'
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom'
 
 function App() {
   return (
-    <>
-      <Header />
-      <Main />
-      <WeatherCard/>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path={`/:lang`} element={<MainContainer />} />
+        <Route path="/" element={<Navigate to="/en/" />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
