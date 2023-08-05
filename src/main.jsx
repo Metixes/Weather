@@ -7,7 +7,7 @@ import i18n from './i18next/i18next'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Router>
     <Routes>
-      <Route path={`/:${i18n.language}`} element={<App />}/>
+      <Route path={`/:lang/`} element={<App />}/>
     </Routes>
   </Router>
 )
