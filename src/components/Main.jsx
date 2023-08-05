@@ -28,7 +28,15 @@ export default function Main() {
 
     useEffect(() => {
         getLatLonWeather(i18n.language)
-        navigate(`/${i18n.language}`)
+
+        if(!i18n.language){
+            navigate(`/en/`) 
+        }else{
+            navigate(`/${i18n.language}/`)
+        }
+        // getLatLonWeather(i18n.language)
+        // navigate(`/${i18n.language}/`)
+        console.log(i18n.language)
     }, [])
 
     const handelShowWeather = (event, cityName, lng) => {
