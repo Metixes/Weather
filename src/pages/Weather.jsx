@@ -2,9 +2,8 @@ import React from 'react'
 import Header from '../components/Header'
 import Main from '../components/Main'
 import WeatherCard from '../components/WeatherCard'
-import { useParams } from 'react-router-dom'
 
-function MainContainer() {
+export default function Weather() {
   return (
     <>
       <Header />
@@ -13,5 +12,3 @@ function MainContainer() {
     </>
   )
 }
-
-export default MainContainer

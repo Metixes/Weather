@@ -32,11 +32,7 @@ export default function Header() {
 
   const changeLang = lang => {
     i18n.changeLanguage(lang)
-<<<<<<< HEAD
-    navigate(`/${lang}/`)
-=======
     navigate(`/${lang}`)
->>>>>>> 83bb1cc59c3434c544d63dbd890e7b43dfd5b559
     getWeathers(lang)
     cardsIsEmpty(lang)
   }
