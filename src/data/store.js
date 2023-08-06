@@ -44,7 +44,7 @@ export const useStore = create()(
                     countryCode: data.city.country,
                     cityDate: dayjs(new Date())
                       .locale(lng)
-                      .format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm' : 'ddd MMMM YYYY, HH:mm'),
+                      .format(lng === 'uk' ? 'dd, DD MMMM, HH:mm' : 'ddd DD MMMM, HH:mm'),
                     weatherIcon: data.list[0].weather[0].icon,
                     weatherDescription: data.list[0].weather[0].description,
                     weatherCurrentTemp: data.list[0].main.temp.toFixed(),
