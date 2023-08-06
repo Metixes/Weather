@@ -43,10 +43,11 @@ const config = {
 
 export default function WeatherCard() {
     const { t } = useTranslation();
-    const card = useStore((state) => state.cards)
-    const selectedFahrenheit = useStore((state) => state.selectedFahrenheit)
-    const selectedCelsius = useStore((state) => state.selectedCelsius)
-    const deleteWeatherCard = useStore((state) => state.deleteWeatherCard)
+    const card = useStore(state => state.cards)
+    // const selectedFahrenheit = useStore((state) => state.selectedFahrenheit)
+    // const selectedCelsius = useStore((state) => state.selectedCelsius)
+    const convertedUnits = useStore(state => state.convertedUnits)
+    const deleteWeatherCard = useStore(state => state.deleteWeatherCard)
 
     return(
         <div className={styles.weather}>
@@ -80,13 +81,13 @@ export default function WeatherCard() {
                                     <div className={styles.weather_card__selectedUnits}>
                                         <button className={cn(styles.weather_card_selectedBtn, {[styles.weather_card_selectedBtnActive] : card[el].disabledFahrenheit})}
                                             disabled={card[el].disabledCelsius}
-                                            onClick={() => selectedCelsius(el, i18n.language)}
+                                            onClick={(e) => convertedUnits(el, e.target.innerText)}
                                         >°C
                                         </button>
                                         <span className={styles.weather_card_slash}></span>
                                         <button className={cn(styles.weather_card_selectedBtn, {[styles.weather_card_selectedBtnActive] : card[el].disabledCelsius})}
                                             disabled={card[el].disabledFahrenheit}
-                                            onClick={() => selectedFahrenheit(el, i18n.language)}   
+                                            onClick={(e) => convertedUnits(el, e.target.innerText)}   
                                         >°F
                                         </button>
                                     </div>

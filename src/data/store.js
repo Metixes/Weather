@@ -1,9 +1,12 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import useCelsius from '../utility/useCelsius'
+import useFahrenheit from '../utility/useFahrenheit'
 import dayjs from 'dayjs'
 import instance from '../config'
-
-const API_KEY = '5fedcbd7c2c4e234f857f50c88de30ae'
+import 'dayjs/locale/en'
+import 'dayjs/locale/uk'
+import 'dayjs/locale/he'
 
 export const useStore = create()(
   persist(
@@ -15,65 +18,64 @@ export const useStore = create()(
         return Object.keys(obj).length === 0
       },
       getLatLonWeather: lng => {
-        if (get().cardsIsEmpty(get().cards) && navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(async position => {
-            const latitude = position.coords.latitude
-            const longitude = position.coords.longitude
-            try {
-              const res = await instance.get('forecast', {
-                params: {
-                  lat: latitude,
-                  lon: longitude,
-                  units: 'metric',
-                  cnt: 40,
-                  appid: API_KEY,
-                  lang: lng,
-                },
-              })
-              const data = res.data
-              if (data) {
-                const card = {
-                  tempUnit: '°C',
-                  disabledCelsius: true,
-                  disabledFahrenheit: false,
-                  cityName: data.city.name,
-                  countryCode: data.city.country,
-                  cityDate: dayjs(new Date())
-                    .locale(lng)
-                    .format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm' : 'ddd MMMM YYYY, HH:mm'),
-                  weatherIcon: data.list[0].weather[0].icon,
-                  weatherDescription: data.list[0].weather[0].description,
-                  weatherCurrentTemp: data.list[0].main.temp.toFixed(),
-                  weatherPressure: data.list[0].main.pressure,
-                  nextData: data.list,
-                  formattedNextData: get().getCurrentData(data.list),
-                  weatherFeelsLike: data.list[0].main.feels_like.toFixed(),
-                  weatherHumidity: data.list[0].main.humidity,
-                  weatherWindSpeed: data.list[0].wind.speed,
-                  cardId: data.city.id,
-                }
+        if (get().cardsIsEmpty(get().cards)) {
+          if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(async position => {
+              const latitude = position.coords.latitude
+              const longitude = position.coords.longitude
+              try {
+                const res = await instance.weather.get('forecast', {
+                  params: {
+                    lat: latitude,
+                    lon: longitude,
+                    units: 'metric',
+                    cnt: 40,
+                    appid: import.meta.env.VITE_API_KEY,
+                    lang: lng,
+                  },
+                })
+                const data = res.data
+                if (data) {
+                  const card = {
+                    tempUnit: '°C',
+                    disabledCelsius: true,
+                    disabledFahrenheit: false,
+                    cityName: data.city.name,
+                    countryCode: data.city.country,
+                    cityDate: dayjs(new Date())
+                      .locale(lng)
+                      .format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm' : 'ddd MMMM YYYY, HH:mm'),
+                    weatherIcon: data.list[0].weather[0].icon,
+                    weatherDescription: data.list[0].weather[0].description,
+                    weatherCurrentTemp: data.list[0].main.temp.toFixed(),
+                    weatherPressure: data.list[0].main.pressure,
+                    nextData: data.list,
+                    formattedNextData: get().getCurrentData(data.list),
+                    weatherFeelsLike: data.list[0].main.feels_like.toFixed(),
+                    weatherHumidity: data.list[0].main.humidity,
+                    weatherWindSpeed: data.list[0].wind.speed,
+                    cardId: data.city.id,
+                  }
 
-                set(state => ({
-                  cards: { ...state.cards, [data.city.id]: card },
-                }))
+                  set(state => ({
+                    cards: { ...state.cards, [data.city.id]: card },
+                  }))
+                }
+              } catch {
+                console.error('error')
               }
-            } catch {
-              console.error('error')
-            }
-            error => {
-              console.error('Error getting geolocation:', error.message)
-            }
-          })
-        } else {
-          console.error('Geolocation is not supported by this browser.')
-        }
+          })}else {
+            console.error('Geolocation is not supported by this browser.')
+          }
+        } 
       },
       getWeathers: async lng => {
         const cards = get().cards
         const citiesId = Object.keys(cards).join()
+        console.log(lng)
 
         try {
-          const { data } = await instance.get('group', {
+          const { data } = await instance.weather.get('group', {
             params: {
               id: citiesId,
               lang: lng,
@@ -109,12 +111,12 @@ export const useStore = create()(
         if (Object.values(get().cards).find(el => el.cityName === cityValue)) return
 
         try {
-          const res = await instance.get('forecast', {
+          const res = await instance.weather.get('forecast', {
             params: {
               q: `${cityValue}`,
               units: 'metric',
               cnt: 40,
-              appid: API_KEY,
+              appid: import.meta.env.VITE_API_KEY,
               lang: lng,
             },
           })
@@ -165,23 +167,19 @@ export const useStore = create()(
           return result
         }
       },
-      selectedCelsius: cardId => {
+      convertedUnits: (cardId, value) => {
         const cards = get().cards
         const currentCard = cards[cardId]
         const isCelsius = cards[cardId].disabledCelsius
         const isFahrenheit = cards[cardId].disabledFahrenheit
 
         if (currentCard) {
-          function getCelsius(celsius) {
-            return Number((((celsius - 32) * 5) / 9).toFixed())
-          }
-
-          const tempInCelsius = currentCard.formattedNextData.map(celsius => {
-            return { d: celsius.d, temp: getCelsius(celsius.temp) }
+          const tempForCharts = currentCard.formattedNextData.map(celsius => {
+            return { d: celsius.d, temp: value === '°C' ? useCelsius(celsius.temp) : useFahrenheit(celsius.temp) }
           })
 
-          const currentTempInCelsius = getCelsius(currentCard.weatherCurrentTemp)
-          const feelsLikeTempInCelsius = getCelsius(currentCard.weatherFeelsLike)
+          const currentTempInUnits = value === '°C' ? useCelsius(currentCard.weatherCurrentTemp) : useFahrenheit(currentCard.weatherCurrentTemp)
+          const feelsLikeTempInUnits = value === '°C' ? useCelsius(currentCard.weatherFeelsLike) : useFahrenheit(currentCard.weatherFeelsLike)
 
           set(state => ({
             cards: {
@@ -191,43 +189,9 @@ export const useStore = create()(
                 disabledCelsius: !isCelsius,
                 disabledFahrenheit: !isFahrenheit,
                 tempUnit: ' °C',
-                formattedNextData: tempInCelsius,
-                weatherCurrentTemp: currentTempInCelsius,
-                weatherFeelsLike: feelsLikeTempInCelsius,
-              },
-            },
-          }))
-        }
-      },
-      selectedFahrenheit: cardId => {
-        const cards = get().cards
-        const currentCard = cards[cardId]
-        const isCelsius = cards[cardId].disabledCelsius
-        const isFahrenheit = cards[cardId].disabledFahrenheit
-
-        if (currentCard) {
-          function getFahrenheit(fahrenheit) {
-            return Number(((fahrenheit * 9) / 5 + 32).toFixed())
-          }
-
-          const tempInFahrenheit = currentCard.formattedNextData.map(fahrenheit => {
-            return { d: fahrenheit.d, temp: getFahrenheit(fahrenheit.temp) }
-          })
-
-          const currentTempInFahrenheit = getFahrenheit(currentCard.weatherCurrentTemp)
-          const feelsLikeTempInFahrenheit = getFahrenheit(currentCard.weatherFeelsLike)
-
-          set(state => ({
-            cards: {
-              ...state.cards,
-              [cardId]: {
-                ...currentCard,
-                disabledCelsius: !isCelsius,
-                disabledFahrenheit: !isFahrenheit,
-                tempUnit: ' °F',
-                formattedNextData: tempInFahrenheit,
-                weatherCurrentTemp: currentTempInFahrenheit,
-                weatherFeelsLike: feelsLikeTempInFahrenheit,
+                formattedNextData: tempForCharts,
+                weatherCurrentTemp: currentTempInUnits,
+                weatherFeelsLike: feelsLikeTempInUnits,
               },
             },
           }))

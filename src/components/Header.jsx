@@ -34,7 +34,7 @@ export default function Header() {
     i18n.changeLanguage(lang)
     navigate(`/${lang}`)
     getWeathers(lang)
-    cardsIsEmpty(lang)
+    // cardsIsEmpty(lang)
   }
   return (
     <div className={styles.header}>

@@ -11,8 +11,8 @@ i18n
   .use(Backend)
   .use(initReactI18next)
   .on('languageChanged', (locale) => {
-      let diraction = i18n.dir(locale)
-      document.dir = diraction
+      let direction = i18n.dir(locale)
+      document.dir = direction
   })
   .init({
     lng: defaultLanguage,

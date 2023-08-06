@@ -5,8 +5,8 @@ import { useStore } from '../data/store'
 import { useTranslation } from 'react-i18next'
 
 import i18n from '../i18next/i18next'
-import useDebounce from '../data/useDebounce'
-import axios from 'axios'
+import useDebounce from '../utility/useDebounce'
+import instance from '../config'
 
 import styles from '../assets/style/main/main.module.scss'
 
@@ -28,12 +28,6 @@ export default function Main() {
 
   useEffect(() => {
     getLatLonWeather(i18n.language)
-
-    // if(!i18n.language){
-    //     navigate(`/en/`)
-    // }else{
-    //     navigate(`/${i18n.language}/`)
-    // }
   }, [])
 
   const handelShowWeather = (event, cityName, lng) => {
@@ -42,20 +36,13 @@ export default function Main() {
 
   const handelShowCurrentWeather = async value => {
     if (value === '') return
-
-    const options = {
-      method: 'GET',
-      baseURL: `https://api.api-ninjas.com/v1/city?`,
-      params: {
-        name: value,
-        limit: 5,
-      },
-      headers: {
-        'X-Api-Key': '49l1hoU5qWpNBF+GahICKg==8kcYVF5gRNsB2H57',
-      },
-    }
     try {
-      const { data } = await axios.request(options)
+      const { data } = await instance.ninjas.get('', {
+        params: {
+          name: value,
+          limit: 5,
+        }
+      })
       if (data) {
         const arrOptions = []
         data.forEach(el => arrOptions.push({ value: el.name, key: crypto.randomUUID() }))
