@@ -93,7 +93,7 @@ export const useStore = create()(
                   weatherDescription: el.weather[0].description,
                   cityDate: dayjs(new Date())
                     .locale(lng)
-                    .format(lng === 'uk' ? 'dd, MMMM YYYY, HH:mm' : 'ddd MMMM YYYY, HH:mm'),
+                    .format(lng === 'uk' ? 'dd, DD MMMM, HH:mm' : 'ddd, DD MMMM, HH:mm'),
                   formattedNextData:
                     lng === 'he'
                       ? get().getCurrentData(updatedCards[el.id].nextData).reverse() // reversed formattedDana if locale language is "he" for charts
@@ -130,7 +130,7 @@ export const useStore = create()(
               countryCode: date.city.country,
               cityDate: dayjs(new Date())
                 .locale(lng)
-                .format(lng === 'uk' ? 'dd MMMM YYYY, HH:mm' : 'ddd MMMM YYYY, HH:mm'),
+                .format(lng === 'uk' ? 'dd, DD MMMM, HH:mm' : 'dd, DD MMMM, HH:mm'),
               weatherIcon: date.list[0].weather[0].icon,
               weatherDescription: date.list[0].weather[0].description,
               weatherCurrentTemp: date.list[0].main.temp.toFixed(),
